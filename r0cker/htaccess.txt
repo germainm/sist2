@@ -1,0 +1,5 @@
+
+#RewriteMap mymap "dbm:/data/node1/test/map-file.map"   mettre dans la config du virtual (a l'exterieur de la balise Directory)
+
+RewriteEngine on
+RewriteRule ^storage/(.*) ${mymap:$1|NOTFOUND} [PT]
