@@ -249,7 +249,15 @@ $.get("indices.json").then(resp => {
 });
 
 function getDocumentInfo(id) {
-    return $.getJSON("d/" + id).fail(showEsError)
+    //return $.getJSON("d/" + id).fail(showEsError)
+    //return $.getJSON("https://sist:sist2@node1.searchevolution.com:9200/sist2/_source/" + id).fail(showEsError)
+	return $.ajax({
+            url : "https://node1.searchevolution.com:9200/sist2/_source/" + id,
+            beforeSend: function (xhr) {
+		xhr.setRequestHeader("Authorization", "Basic " + btoa("sist:sist2"));
+	    },
+	    error: showEsError
+	});
 }
 
 function handleTreeClick(tree) {
@@ -759,7 +767,7 @@ function getNextDepth(node) {
         };
     }
 
-    return $.jsonPost("es", q).then(resp => {
+    return $.jsonPost("https://node1.searchevolution.com:9200/sist2/_search", q).then(resp => {
         const buckets = resp["aggregations"]["paths"]["buckets"];
         if (!buckets) {
             return false;
